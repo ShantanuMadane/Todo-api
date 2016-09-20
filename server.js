@@ -1,19 +1,24 @@
 var express=require('express');
+var bodyParser=require('body-parser');
 var app=express();
 var PORT=process.env.PORT || 5000;
-var todos=[{
-	id:1,
-	description:"Meet friends at 7pm",
-	completed:false
-},{ id:2,
-	description:"Rave All Night",
-	completed:false
-},
-{   id:3,
-	description:"Work at Office",
-	completed:true
-}
-];
+// var todos=[{
+// 	id:1,
+// 	description:"Meet friends at 7pm",
+// 	completed:false
+// },{ id:2,
+// 	description:"Rave All Night",
+// 	completed:false
+// },
+// {   id:3,
+// 	description:"Work at Office",
+// 	completed:true
+// }
+// ];
+var todos=[];
+var todoNextId=1;
+app.use(bodyParser.json());
+
 app.get('/',function(req,res){
 res.send(" TODO API ROOT");
 });
@@ -38,6 +43,19 @@ else{
 res.status(404).send();
 }
 });
+// POST TODOS
+app.post('/todos',function(req,res){
+	var body=req.body;
+	console.log('description:'+body.description);
+	//Push
+	body.id=todoNextId;
+	todoNextId++;
+	todos.push(body);
+
+	res.json(body);
+
+});
+
 app.listen(PORT,function(req,res){
 console.log("APP LISTENING ON PORT:"+PORT);
 });
